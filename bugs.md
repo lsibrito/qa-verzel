@@ -29,3 +29,48 @@ e aumentar novamente para duas.
 ### Evidência
 
 ![BUG-01: frete cobrado com subtotal de R$ 200,00](evidencias/bug-01-frete-200.png)
+
+
+## BUG-02 — API aceita quantidade acima do limite de cinco unidades
+
+### Regra esperada
+
+O CA10 informa que cada produto pode ter no máximo cinco
+unidades, tanto na interface quanto na API.
+
+### Como reproduzir
+
+Enviei uma requisição POST para `/api/carrinho/calcular`,
+sem cupom, com o seguinte corpo:
+
+```json
+{
+  "itens": [
+    { "produtoId": "P005", "quantidade": 6 }
+  ]
+}
+```
+
+### Resultado esperado
+
+A API deveria rejeitar a requisição com status 422
+e código `QUANTIDADE_MAXIMA_EXCEDIDA`.
+
+### Resultado obtido
+
+A API respondeu com status 200 e calculou as seis mochilas.
+A resposta trouxe quantidade 6, subtotal de R$ 600,00,
+desconto de R$ 0,00, frete grátis e total de R$ 600,00.
+
+Repeti a execução e o comportamento continuou igual.
+
+### Impacto
+
+O endpoint de cálculo aceita uma quantidade acima do limite
+documentado, embora a interface impeça adicionar a sexta unidade.
+
+A confirmação de pedido com essa quantidade ainda não foi testada.
+
+### Evidência
+
+![API aceita seis mochilas acima do limite](evidencias/bug-02-limite-api.png)

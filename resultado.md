@@ -132,17 +132,34 @@ Resultado:
 - O botão de aumentar ficou desabilitado no carrinho.
 - No catálogo, o botão de adicionar também ficou desabilitado e apareceu "Limite de 5 unidades atingido."
 - Ao reduzir para quatro, consegui adicionar outra mochila até chegar a cinco novamente.
-- Status: Passou.
-- A validação desse limite pela API ainda não foi testada.
+- Pela API, cinco mochilas foram aceitas com status 200 e total de R$ 500,00.
+- Ao enviar seis mochilas, esperava status 422, mas recebi 200 e total de R$ 600,00.
+- Status pela interface: Passou.
+- Status pela API: Falhou na rejeição da sexta unidade. Registrado como BUG-02 em `bugs.md`.
 
 
 ## Testes automatizados
 
-- Automatizei os CT-04, CT-05 e CT-06 com Playwright em JavaScript.
-- Os testes verificam cupom válido, inexistente e expirado.
-- Executei pelo terminal com o comando:
-  `npx playwright test --headed`
-- Resultado: os três testes passaram.
-- Código dos testes: [cupom.spec.js](tests/cupom.spec.js).
+Implementei oito testes com Playwright em JavaScript:
 
-![Execução dos três testes automatizados](evidencias/automacao-cupons.png)
+- CT-04: cupom válido.
+- CT-05: cupom inexistente.
+- CT-06: cupom expirado.
+- CT-07: cupom em minúsculas.
+- CT-07: cupom com espaços no início e no fim.
+- CT-10 pela API: aceitar cinco unidades.
+- CT-10 pela API: rejeitar seis unidades.
+- CT-02 pela API: frete grátis no subtotal de exatamente R$ 200,00.
+
+Executei a suíte completa com `npx playwright test`.
+
+Resultado: seis testes passaram e dois falharam.
+As falhas reproduzem os problemas registrados como BUG-01
+e BUG-02. Mantive os resultados esperados conforme a
+documentação da loja.
+
+Código:
+- [Testes de cupons](tests/cupom.spec.js)
+- [Testes da API do carrinho](tests/carrinho-api.spec.js)
+
+![Resultado da suíte completa](evidencias/automacao-completa.png)

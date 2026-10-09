@@ -1,6 +1,9 @@
 # Teste técnico de QA — Verzel Store
 
-Neste projeto, registrei os cenários de teste, os resultados das execuções manuais e um bug encontrado na Verzel Store. Também automatizei três cenários com Playwright em JavaScript.
+Neste projeto, registrei cenários de teste, resultados das
+execuções manuais e dois bugs encontrados na Verzel Store.
+Também implementei oito testes automatizados com Playwright
+em JavaScript, cobrindo a interface e a API do carrinho.
 
 ## Organização dos arquivos
 
@@ -9,6 +12,8 @@ Neste projeto, registrei os cenários de teste, os resultados das execuções ma
 - `bugs.md`: descrição do bug encontrado e passos para reproduzir.
 - `evidencias/`: imagens das execuções.
 - `tests/cupom.spec.js`: testes automatizados de cupons.
+- `tests/carrinho-api.spec.js`: testes de limite de unidades
+  e frete pela API.
 - `playwright.config.js`: configuração do Playwright.
 
 ## Como executar os testes
@@ -45,27 +50,39 @@ Para abrir o relatório HTML após a execução:
 npx playwright show-report
 ```
 
-## Cenários automatizados
+## Testes automatizados
 
-- CT-04: aplicar um cupom válido.
-- CT-05: rejeitar um cupom inexistente.
-- CT-06: rejeitar um cupom expirado.
+Implementei oito testes:
 
-Na execução registrada, os três testes passaram.
+- Cupom válido, inexistente e expirado: três testes.
+- Cupom em minúsculas e com espaços: dois testes.
+- Limite de cinco unidades pela API: dois testes.
+- Frete grátis em subtotal de exatamente R$ 200,00 pela API:
+  um teste.
 
-## Bug encontrado
+Na execução completa, seis testes passaram e dois falharam.
 
-Com subtotal de exatamente R$ 200,00, o carrinho cobrou
-R$ 19,90 de frete, embora a documentação informe frete
-grátis a partir desse valor.
+As falhas reproduzem os bugs documentados:
+- BUG-01: cobrança de frete no subtotal de R$ 200,00.
+- BUG-02: API de cálculo aceita seis unidades do mesmo produto.
 
-Os detalhes e a evidência estão em `bugs.md`.
+Os testes verificam o comportamento esperado na documentação.
+Por isso, a execução termina com falha enquanto esses problemas
+persistirem na aplicação.
+
+## Bugs encontrados
+
+- BUG-01: frete cobrado no subtotal de exatamente R$ 200,00,
+  reproduzido na interface e na API.
+- BUG-02: API de cálculo aceita quantidade acima do limite
+  de cinco unidades por produto.
+
+Os passos de reprodução e as evidências estão em `bugs.md`.
 
 ## Limitações
 
-A validação do limite de cinco unidades pela API ainda
-não foi testada. O resultado registrado para esse cenário
-se refere à interface.
+Os testes de API cobrem o endpoint de cálculo do carrinho.
+A confirmação de pedidos pela API não foi testada.
 
 ## Uso de IA
 

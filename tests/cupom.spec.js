@@ -94,3 +94,38 @@ test('CT-06 — Rejeitar cupom expirado', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Remover cupom' }))
     .toHaveCount(0);
 });
+
+for (const entrada of ['bemvindo10', ' BEMVINDO10 ']) {
+  test(`CT-07 — Aceitar cupom na entrada ${JSON.stringify(entrada)}`, async ({ page }) => {
+    await page.goto('/');
+
+    await page
+      .getByRole('article', { name: 'Mochila Urbana 20L' })
+      .getByRole('button', { name: 'Adicionar ao carrinho' })
+      .click();
+
+    await page
+      .getByRole('link', { name: 'Carrinho 1 itens no carrinho' })
+      .click();
+
+    await page
+      .getByRole('textbox', { name: 'Cupom de desconto' })
+      .fill(entrada);
+
+    await page
+      .getByRole('button', { name: 'Aplicar cupom' })
+      .click();
+
+    await expect(
+      page.getByText('Cupom BEMVINDO10 aplicado.', { exact: true })
+    ).toBeVisible();
+
+    await expect(
+      page.getByText(/^[-−]\s*R\$\s*10,00$/)
+    ).toBeVisible();
+
+    await expect(
+      page.getByText(/^R\$\s*109,90$/)
+    ).toBeVisible();
+  });
+}

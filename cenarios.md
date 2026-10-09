@@ -145,3 +145,41 @@ Cenário: Impedir a inclusão da sexta mochila
   E o botão "Adicionar ao carrinho" da mochila deve estar desabilitado no catálogo
   E deve aparecer uma mensagem informando o limite de cinco unidades
 ```
+
+## Complemento do CT-10 — Limite de unidades pela API
+
+Critério de aceite relacionado: CA10.
+
+```gherkin
+Cenário: Aceitar cinco unidades pela API
+  Dado que envio o produto P005 com quantidade 5 e sem cupom
+  Quando solicito o cálculo em POST /api/carrinho/calcular
+  Então a resposta deve ter status 200
+  E deve conter um item com quantidade 5
+  E o subtotal deve ser 500
+  E o desconto e o frete devem ser 0
+  E o total deve ser 500
+
+Cenário: Rejeitar seis unidades pela API
+  Dado que envio o produto P005 com quantidade 6 e sem cupom
+  Quando solicito o cálculo em POST /api/carrinho/calcular
+  Então a resposta deve ter status 422
+  E o código de erro deve ser QUANTIDADE_MAXIMA_EXCEDIDA
+```
+
+## Complemento do CT-02 — Frete no limite pela API
+
+Critérios de aceite relacionados: CA06 e CA07.
+
+```gherkin
+Cenário: Aplicar frete grátis no subtotal de exatamente 200
+  Dado que envio o produto P005 com quantidade 2 e sem cupom
+  Quando solicito o cálculo em POST /api/carrinho/calcular
+  Então a resposta deve ter status 200
+  E o subtotal deve ser 200
+  E o desconto deve ser 0
+  E o valor faltante para frete grátis deve ser 0
+  E o frete deve ser 0
+  E freteGratis deve ser verdadeiro
+  E o total deve ser 200
+```
