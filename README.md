@@ -69,7 +69,7 @@ se refere à interface.
 
 ## Uso de IA
 
-Utilizei IA como apoio para entender o Playwright,
-organizar a documentação e construir os testes automatizados.
-Executei os testes e conferi os resultados apresentados
-neste projeto.
+Utilizei IA como apoio na organização da documentação
+e na elaboração dos testes automatizados. Realizei as
+execuções manuais e automatizadas e conferi os resultados
+registrados neste projeto.
